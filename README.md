@@ -224,14 +224,6 @@ npm run preview
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
-## 🆘 Support
-
-If you encounter any issues or have questions:
-
-1. Check the [Issues](https://github.com/roba-6734/WordMaster/issues) page
-2. Create a new issue with detailed information
-3. Include your environment details and error logs
-
 
 ---
 
