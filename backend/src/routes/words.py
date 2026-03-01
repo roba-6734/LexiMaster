@@ -87,11 +87,7 @@ async def add_word(word_data: WordCreate, current_user = Depends(get_current_use
 
         
     except HTTPException:
-        logging.error(f"word: {word_text} already exists")
-        raise HTTPException(
-                status_code=400, 
-                detail=f"Word '{word_text}' already exists in your vocabulary"
-            )
+        raise
     except Exception as e:
         logging.error("Error while trying to add the word {}".format(e))
         
@@ -341,7 +337,7 @@ async def delete_word(
         # Update user stats
         user_ref = db.collection("users").document(user_id)
         user_ref.update({
-            "stats.totalWordsAdded": firestore.Increment(-1)
+            "stats.total_words_added": firestore.Increment(-1)
         })
         
         return {

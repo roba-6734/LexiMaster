@@ -209,7 +209,7 @@ async def get_due_words(
             retention_rate = learning_service.calculate_retention_score(correct_reviews, total_reviews)
             
             # Get strength description
-            strength_description = learning_service.get_word_strength_description(strength)
+            strength_description = learning_service.get_strength_description(strength)
             
             # Handle other timestamps
             last_reviewed = word_data.get("lastReviewed")
@@ -273,22 +273,17 @@ async def get_learning_stats(
         # Get stats from progress service
         stats_data = await progress_service.get_learning_stats(user_id)
         
-        # Get user's current and longest streak from user document
-        user_doc = db.collection("users").document(user_id).get()
-        user_data = user_doc.to_dict() if user_doc.exists else {}
-        user_stats = user_data.get("stats", {})
-        
-        
         stats = LearningStats(
-            total_words_added=user_stats["total_words_added"],
+            total_words_added=stats_data["total_words_added"],
+            total_quizzes_taken=stats_data["total_quizzes_taken"],
             words_learning=stats_data["words_learning"],
             words_strong=stats_data["words_strong"],
             words_mastered=stats_data["words_mastered"],
             due_for_review=stats_data["due_for_review"],
             overdue_words=stats_data["overdue_words"],
             overall_accuracy=stats_data["overall_accuracy"],
-            current_streak=user_stats.get("currentStreak", 0),
-            longest_streak=user_stats.get("longestStreak", 0),
+            current_streak=stats_data["current_streak"],
+            longest_streak=stats_data["longest_streak"],
             reviews_today=stats_data["reviews_today"],
             reviews_this_week=stats_data["reviews_this_week"],
             reviews_total=stats_data["reviews_total"]
@@ -453,4 +448,3 @@ async def get_learning_analytics(
             status_code=500,
             detail="Failed to get learning analytics"
         )
-

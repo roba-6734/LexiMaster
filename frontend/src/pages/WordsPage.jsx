@@ -34,6 +34,7 @@ import { Link } from 'react-router-dom';
 const WordsPage = () => {
   const { user } = useAuth();
   const [words, setWords] = useState([]);
+  const [error, setError] = useState('');
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
   const [filterDifficulty, setFilterDifficulty] = useState('all');
@@ -51,79 +52,38 @@ const WordsPage = () => {
   const loadWords = async () => {
     try {
       setLoading(true);
+      setError('');
       const response = await apiService.getWords(currentPage, 20, searchTerm);
       console.log(response)
       setWords(response.words || []);
-      setTotalPages(response.total_pages || 1);
+      const total = response.total || 0;
+      const perPage = response.per_page || 20;
+      setTotalPages(Math.max(1, Math.ceil(total / perPage)));
     } catch (error) {
       console.error('Failed to load words:', error);
-      // For demo purposes, show sample data
-      setWords(generateSampleWords());
+      setWords([]);
+      setTotalPages(1);
+      setError(error.message || 'Failed to load words');
     } finally {
       setLoading(false);
     }
   };
 
-  const generateSampleWords = () => [
-    {
-      id: 1,
-      word: "serendipity",
-      definitions: [{ definition: "The occurrence of events by chance in a happy way" }],
-      difficulty: "intermediate",
-      created_at: "2024-01-15",
-      next_review: "2024-01-20",
-      mastery_level: 3
-    },
-    {
-      id: 2,
-      word: "ephemeral",
-      definitions: [{ definition: "Lasting for a very short time" }],
-      difficulty: "advanced",
-      created_at: "2024-01-14",
-      next_review: "2024-01-19",
-      mastery_level: 2
-    },
-    {
-      id: 3,
-      word: "ubiquitous",
-      definitions: [{ definition: "Present, appearing, or found everywhere" }],
-      difficulty: "advanced",
-      created_at: "2024-01-13",
-      next_review: "2024-01-18",
-      mastery_level: 4
-    },
-    {
-      id: 4,
-      word: "mellifluous",
-      definitions: [{ definition: "Sweet or musical; pleasant to hear" }],
-      difficulty: "advanced",
-      created_at: "2024-01-12",
-      next_review: "2024-01-17",
-      mastery_level: 1
-    },
-    {
-      id: 5,
-      word: "perspicacious",
-      definitions: [{ definition: "Having keen insight; mentally sharp" }],
-      difficulty: "advanced",
-      created_at: "2024-01-11",
-      next_review: "2024-01-16",
-      mastery_level: 2
-    }
-  ];
-
   const filteredWords = words.filter(word => {
     const matchesSearch = word.word.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         word.definitions?.[0]?.definition.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesDifficulty = filterDifficulty === 'all' || word.difficulty === filterDifficulty;
+                         (word.definitions?.[0]?.definition || '').toLowerCase().includes(searchTerm.toLowerCase());
+    const difficulty = word.difficulty_level || word.difficulty;
+    const matchesDifficulty = filterDifficulty === 'all' || difficulty === filterDifficulty;
     return matchesSearch && matchesDifficulty;
   });
 
   const getDifficultyColor = (difficulty) => {
     switch (difficulty) {
       case 'beginner': return 'bg-green-100 text-green-800';
+      case 'easy': return 'bg-green-100 text-green-800';
       case 'intermediate': return 'bg-yellow-100 text-yellow-800';
       case 'advanced': return 'bg-red-100 text-red-800';
+      case 'hard': return 'bg-red-100 text-red-800';
       default: return 'bg-gray-100 text-gray-800';
     }
   };
@@ -180,6 +140,13 @@ const handleStudyWord = (word) => {
           Add Word
         </Button>
       </div>
+      {error && (
+        <Card>
+          <CardContent className="p-4 text-sm text-red-600">
+            {error}
+          </CardContent>
+        </Card>
+      )}
 
       {/* Search and Filters */}
       <Card>
@@ -215,14 +182,14 @@ const handleStudyWord = (word) => {
                   <DropdownMenuItem onClick={() => setFilterDifficulty('all')}>
                     All Levels
                   </DropdownMenuItem>
-                  <DropdownMenuItem onClick={() => setFilterDifficulty('beginner')}>
-                    Beginner
+                  <DropdownMenuItem onClick={() => setFilterDifficulty('easy')}>
+                    Easy
                   </DropdownMenuItem>
                   <DropdownMenuItem onClick={() => setFilterDifficulty('intermediate')}>
                     Intermediate
                   </DropdownMenuItem>
-                  <DropdownMenuItem onClick={() => setFilterDifficulty('advanced')}>
-                    Advanced
+                  <DropdownMenuItem onClick={() => setFilterDifficulty('hard')}>
+                    Hard
                   </DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
@@ -270,8 +237,8 @@ const handleStudyWord = (word) => {
                     {word.word}
                   </CardTitle>
                   <div className="flex items-center gap-2 mt-2">
-                    <Badge className={getDifficultyColor(word.difficulty)}>
-                      {word.difficulty}
+                    <Badge className={getDifficultyColor(word.difficulty_level || word.difficulty)}>
+                      {word.difficulty_level || word.difficulty || 'unknown'}
                     </Badge>
                     <div className="flex items-center gap-1">
                       <div className={`w-2 h-2 rounded-full ${getMasteryColor(word.mastery_level)}`}></div>
@@ -324,7 +291,7 @@ const handleStudyWord = (word) => {
                 </div>
                 <div className="flex items-center gap-1">
                   <Target className="h-3 w-3" />
-                  Review {new Date(word.next_review).toLocaleDateString()}
+                  Review {word.next_review ? new Date(word.next_review).toLocaleDateString() : 'N/A'}
                 </div>
               </div>
             </CardContent>

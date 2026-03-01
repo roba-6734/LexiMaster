@@ -26,7 +26,8 @@ async def register_user(user:UserCreate):
                 "stats": {
                     "total_words_added": 0,
                     "total_quizzes_taken": 0,
-                    "current_streak": 0
+                    "current_streak": 0,
+                    "longest_streak": 0
                 }
             }
         
@@ -66,12 +67,19 @@ async def login(userLogin:UserLogin):
         }
     
        
-    except Exception as e:
-        print(f"🔍 Validation Error: {e}")
+    except HTTPException:
+        raise
+    except CustomException:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Incorrect email or password",
             headers={"WWW-Authenticate": "Bearer"},
+        )
+    except Exception as e:
+        print(f"🔍 Validation Error: {e}")
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail="Authentication failed due to a server error",
         )
     
 
@@ -87,5 +95,3 @@ async def get_user_info(current_user=Depends(get_current_user)):
 @router.post('/logout')
 def logout():
     return {'message':"You have successfully logged out"}
-
-

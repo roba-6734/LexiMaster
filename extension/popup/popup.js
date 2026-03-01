@@ -10,6 +10,7 @@ let totalWordsEl, dueWordsEl, accuracyEl, streakEl;
 let openAppBtn, refreshStatsBtn;
 let successMessage, errorMessage;
 let recentActivity, recentWords;
+const WEB_APP_URL = chrome.runtime.getManifest().homepage_url || 'https://word-master-nu.vercel.app/';
 
 // Initialize popup
 document.addEventListener('DOMContentLoaded', async () => {
@@ -64,7 +65,7 @@ function setupEventListeners() {
     
     // Open web app button
     openAppBtn.addEventListener('click', () => {
-        chrome.tabs.create({ url: 'https://word-master-nu.vercel.app/' } ); // Update with your web app URL
+        chrome.tabs.create({ url: WEB_APP_URL } );
     });
     
     // Refresh stats button
@@ -181,22 +182,33 @@ async function loadUserStats() {
             updateStatsDisplay(response.stats);
         } else {
             console.error('❌ Failed to load stats:', response.error);
-            // Don't show error to user for stats failure
+            resetStatsDisplay();
+            showError(response.error || 'Failed to load stats');
         }
     } catch (error) {
         console.error('❌ Stats loading error:', error);
+        resetStatsDisplay();
+        showError('Failed to load stats');
     }
+}
+
+function resetStatsDisplay() {
+    totalWordsEl.textContent = '0';
+    dueWordsEl.textContent = '0';
+    accuracyEl.textContent = '0%';
+    streakEl.textContent = '0';
+    recentActivity.style.display = 'none';
 }
 
 // Update stats display
 function updateStatsDisplay(stats) {
     totalWordsEl.textContent = stats.total_words_added || 0;
-    dueWordsEl.textContent = stats.due_today || 0;
+    dueWordsEl.textContent = stats.due_for_review || 0;
     accuracyEl.textContent = stats.overall_accuracy ? `${Math.round(stats.overall_accuracy)}%` : '0%';
     streakEl.textContent = stats.current_streak || 0;
     
     // Show recent activity if there are words
-    if (stats.total_words > 0) {
+    if (stats.total_words_added > 0) {
         recentActivity.style.display = 'block';
         loadRecentWords();
     }
@@ -218,6 +230,7 @@ async function loadRecentWords() {
 function showLoginSection() {
     loginSection.style.display = 'block';
     mainContent.style.display = 'none';
+    resetStatsDisplay();
     setTimeout(() => emailInput.focus(), 100);
 }
 

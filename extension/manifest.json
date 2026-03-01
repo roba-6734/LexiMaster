@@ -2,6 +2,7 @@
   "manifest_version": 3,
   "name": "WordMaster - Vocabulary Builder",
   "version": "1.0.0",
+  "homepage_url": "https://word-master-nu.vercel.app/",
   "description": "Build your vocabulary while browsing the web. Select any word and right-click to add it to your learning collection.",
   
   "permissions": [
@@ -13,8 +14,9 @@
   ],
   
   "host_permissions": [
-    "http://localhost:5000/*",
-    "https://your-api-domain.com/*"
+    "http://localhost:8000/*",
+    "http://127.0.0.1:8000/*",
+    "https://wordmaster-h00v.onrender.com/*"
   ],
   
   "background": {

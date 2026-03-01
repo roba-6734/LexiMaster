@@ -171,6 +171,7 @@ async def preview_quiz(
     """
     Preview what a quiz would look like without generating a full quiz
     """
+    preview_quiz = None
     try:
         user_id = current_user["id"]
         
@@ -213,6 +214,9 @@ async def preview_quiz(
             status_code=500,
             detail="Failed to generate quiz preview"
         )
+    finally:
+        if preview_quiz:
+            quiz_service.active_quizzes.pop(preview_quiz.quiz_id, None)
 
 @router.get("/history")
 async def get_quiz_history(

@@ -19,7 +19,7 @@ export const AuthProvider = ({ children }) => {
   // Check if user is authenticated on app load
   useEffect(() => {
     const checkAuth = async () => {
-      const token = localStorage.getItem('authToken');
+      const token = localStorage.getItem('AuthToken');
       
       if (token) {
         try {
@@ -29,7 +29,7 @@ export const AuthProvider = ({ children }) => {
         } catch (error) {
           console.error('Auth check failed:', error);
           // Token might be expired, clear it
-          localStorage.removeItem('authToken');
+          localStorage.removeItem('AuthToken');
           apiService.setToken(null);
         }
       }

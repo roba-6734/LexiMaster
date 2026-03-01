@@ -52,7 +52,7 @@ const DashboardPage = () => {
     );
   }
 
-  const progressPercentage = stats ? Math.min((stats.total_words / 100) * 100, 100) : 0;
+  const progressPercentage = stats ? Math.min((stats.total_words_added / 100) * 100, 100) : 0;
 
   return (
     <div className="container mx-auto p-6 space-y-6">
@@ -90,7 +90,7 @@ const DashboardPage = () => {
           <CardContent>
             <div className="text-2xl font-bold">{stats?.total_words_added || 0}</div>
             <p className="text-xs text-muted-foreground">
-              +{stats?.words_this_week || 0} this week
+              {stats?.reviews_this_week || 0} reviews this week
             </p>
           </CardContent>
         </Card>
@@ -101,7 +101,7 @@ const DashboardPage = () => {
             <Calendar className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{stats?.due_today || 0}</div>
+            <div className="text-2xl font-bold">{stats?.due_for_review || 0}</div>
             <p className="text-xs text-muted-foreground">
               Words to review
             </p>
@@ -153,7 +153,7 @@ const DashboardPage = () => {
             <div>
               <div className="flex justify-between text-sm mb-2">
                 <span>Words Learned</span>
-                <span>{stats?.total_words || 0}/100</span>
+                <span>{stats?.total_words_added || 0}/100</span>
               </div>
               <Progress value={progressPercentage} className="h-2" />
             </div>
@@ -161,13 +161,13 @@ const DashboardPage = () => {
             <div className="grid grid-cols-2 gap-4 pt-4">
               <div className="text-center">
                 <div className="text-2xl font-bold text-green-600">
-                  {stats?.mastered_words || 0}
+                  {stats?.words_mastered || 0}
                 </div>
                 <div className="text-sm text-muted-foreground">Mastered</div>
               </div>
               <div className="text-center">
                 <div className="text-2xl font-bold text-blue-600">
-                  {stats?.learning_words || 0}
+                  {stats?.words_learning || 0}
                 </div>
                 <div className="text-sm text-muted-foreground">Learning</div>
               </div>
@@ -190,9 +190,9 @@ const DashboardPage = () => {
               <Link to="/study">
                 <Play className="h-4 w-4 mr-2" />
                 Start Study Session
-                {stats?.due_today > 0 && (
+                {stats?.due_for_review > 0 && (
                   <Badge variant="secondary" className="ml-auto">
-                    {stats.due_today}
+                    {stats.due_for_review}
                   </Badge>
                 )}
               </Link>

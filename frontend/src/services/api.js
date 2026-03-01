@@ -1,9 +1,21 @@
-const API_BASE_URL = 'https://wordmaster-h00v.onrender.com'
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'https://wordmaster-h00v.onrender.com'
 
 class ApiService {
     constructor(){
         this.token = localStorage.getItem('AuthToken')
 
+    }
+
+    async parseJsonSafe(response){
+        const text = await response.text()
+        if(!text){
+            return {}
+        }
+        try{
+            return JSON.parse(text)
+        }catch{
+            return {_raw:text}
+        }
     }
 
     setToken(token){
@@ -38,15 +50,18 @@ class ApiService {
             })
 
         })
-        const data  = await response.json();
+        const data  = await this.parseJsonSafe(response);
         console.log("we got data, this is the data")
         if (response.ok && data.access_token){
             this.setToken(data.access_token);
             console.log('we are fetching user data and it was successful')
+            const currentUser = await this.getCurrentUser().catch(() => ({
+                id: data.user_id
+            }))
 
             return {
                 success:true,
-                user:data,
+                user:currentUser,
                 token:data.access_token
             }
         }
@@ -68,14 +83,14 @@ class ApiService {
 
         })
 
-        const data = await response.json()
+        const data = await this.parseJsonSafe(response)
         if(response.ok ){
             return {
                 success:true,
                 user:data
             }
         }else{
-            throw new Error(data.detail || 'Registration failed')
+            throw new Error(data.detail || data.message || data._raw || `Registration failed (HTTP ${response.status})`)
         }
 
     }
@@ -86,24 +101,30 @@ class ApiService {
             headers:this.getHeaders(),
 
         })
+        const data = await this.parseJsonSafe(response)
         if(response.ok){
-            return response.json()
+            return data
         }else{
-            throw new Error(response.detail || "Failed to get user info")
+            throw new Error(data.detail || "Failed to get user info")
         }
 
+    }
+    async getCurrentUser(){
+        return this.getUserData()
     }
     async getStats(){
         try{
         const response = await fetch(`${API_BASE_URL}/api/progress/stats`,{
             headers:this.getHeaders()
         })
+        const data = await this.parseJsonSafe(response)
         if(response.ok){
-            return response.json()
+            return data
         }
+        throw new Error(data.detail || "Failed to fetch user stats")
      }
         catch(error){
-            throw new Error(error.detail || "Failed to fetch user stats")
+            throw new Error(error.message || "Failed to fetch user stats")
         }
         
     }
@@ -118,13 +139,13 @@ class ApiService {
             const response = await fetch(`${API_BASE_URL}/api/words?${queryParams}`,{
                 method:'GET',
                 headers:this.getHeaders()})
+            const data = await this.parseJsonSafe(response)
 
             
            if (!response.ok) {
-            const errorData = await response.json();
-            throw new Error(errorData.message || 'Error fetching words');
+            throw new Error(data.message || data.detail || 'Error fetching words');
             }
-            return response.json();
+            return data;
 
         }catch(error){
             console.log(error)
@@ -141,17 +162,45 @@ class ApiService {
                     word
                 })
             });
+            const data = await this.parseJsonSafe(response)
             if(!response.ok){
-                const errorData = await response.json();
-                throw new Error(errorData.message || 'Error fetching words');
+                throw new Error(data.detail || data.message || 'Error adding word');
             }
             console.log(response)
-            return response.json()
+            return data
 
 
         }catch(error){
             throw new Error(error.message || "Failed to add the word")
         }
+    }
+    async deleteWord(wordId){
+        const response = await fetch(`${API_BASE_URL}/api/words/${wordId}`,{
+            method:'DELETE',
+            headers:this.getHeaders()
+        })
+        const data = await this.parseJsonSafe(response)
+        if(response.ok){
+            return data
+        }
+        throw new Error(data.detail || "Failed to delete word")
+    }
+    async updateWordProgress(wordId,difficulty){
+        const isCorrect = difficulty !== 'hard'
+        const response = await fetch(`${API_BASE_URL}/api/progress/review`,{
+            method:'POST',
+            headers:this.getHeaders(),
+            body: JSON.stringify({
+                word_id: wordId,
+                is_correct: isCorrect,
+                quiz_type: "flashcard"
+            })
+        })
+        const data = await this.parseJsonSafe(response)
+        if(response.ok){
+            return data
+        }
+        throw new Error(data.detail || "Failed to update progress")
     }
 
     logout(){

@@ -15,10 +15,9 @@ class ProgressService:
         """Get existing progress or create new progress entry for a word"""
         
         # Check if progress already exists
-        progress_query = db.collection("progress").filter(
-            "userId", "==", user_id,
-            "wordId", "==", word_id
-        )
+        progress_query = (db.collection("progress")
+                          .where("userId", "==", user_id)
+                          .where("wordId", "==", word_id))
         existing_progress = list(progress_query.stream())
 
         
@@ -173,15 +172,19 @@ class ProgressService:
             
             # Initialize stats
             stats = {
-                "total_words_added": len(progress_docs),
+                "total_words_added": user_stats.get(
+                    "total_words_added",
+                    user_stats.get("totalWordsAdded", len(progress_docs))
+                ),
+                "total_quizzes_taken": user_stats.get("total_quizzes_taken", user_stats.get("totalQuizzesTaken", 0)),
                 "words_learning": 0,  # strength 1-3
                 "words_strong": 0,    # strength 4-5  
                 "words_mastered": 0,  # strength 6+
                 "due_for_review": 0,
                 "overdue_words": 0,
                 "overall_accuracy": 0,
-                "current_streak": user_stats.get("currentStreak", 0),  # ← ADD THIS
-                "longest_streak": user_stats.get("longestStreak", 0),   # ← ADD THIS
+                "current_streak": user_stats.get("current_streak", user_stats.get("currentStreak", 0)),
+                "longest_streak": user_stats.get("longest_streak", user_stats.get("longestStreak", 0)),
                 "reviews_today": 0,
                 "reviews_this_week": 0,
                 "reviews_total": 0
@@ -231,10 +234,9 @@ class ProgressService:
             
             # Get recent review activity
            
-            quiz_results_query = (db.collection('quiz_results').filter(
-                "userId", "==", user_id,
-                "reviewDate", ">=", today_start
-            ))
+            quiz_results_query = (db.collection('quiz_results')
+                                .where("userId", "==", user_id)
+                                .where("reviewDate", ">=", today_start))
             
             today_results = list(quiz_results_query.stream())
             stats["reviews_today"] = len(today_results)
@@ -252,21 +254,7 @@ class ProgressService:
             
         except Exception as e:
             logging.error(f"Error getting learning stats: {str(e)}")
-            # Return default stats if error
-            return {
-                "total_words": 0,
-                "words_learning": 0,
-                "words_strong": 0,
-                "words_mastered": 0,
-                "due_for_review": 0,
-                "overdue_words": 0,
-                "overall_accuracy": 0,
-                "current_streak": 0,
-                "longest_streak": 0,
-                "reviews_today": 0,
-                "reviews_this_week": 0,
-                "reviews_total": 0
-            }
+            raise
 
     
     async def _update_user_stats(self, user_id: str, is_correct: bool):
@@ -276,14 +264,14 @@ class ProgressService:
         
         # Update quiz count
         user_ref.update({
-            "stats.totalQuizzesTaken": firestore.Increment(1)
+            "stats.total_quizzes_taken": firestore.Increment(1)
         })
         
         # Update streak if correct
         if is_correct:
             # This is simplified - in a real app you'd track daily streaks
             user_ref.update({
-                "stats.currentStreak": firestore.Increment(1)
+                "stats.current_streak": firestore.Increment(1)
             })
 
 # Create global instance

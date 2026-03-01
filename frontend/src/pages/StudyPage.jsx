@@ -37,6 +37,7 @@ const StudyPage = () => {
   const [sessionComplete, setSessionComplete] = useState(false);
   const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
+  const [error, setError] = useState('');
 
   useEffect(() => {
     loadStudySession();
@@ -45,6 +46,7 @@ const StudyPage = () => {
   const loadStudySession = async () => {
     try {
       setLoading(true);
+      setError('');
       const response = await apiService.getWords();
       
       if (response.words && response.words.length > 0) {
@@ -52,76 +54,18 @@ const StudyPage = () => {
         setStudyWords(response.words);
         setSessionStats(prev => ({ ...prev, total: response.words.length }));
       } else {
-        // Generate sample study words for demo
-        setStudyWords(generateSampleStudyWords());
-        setSessionStats(prev => ({ ...prev, total: 5 }));
+        setStudyWords([]);
+        setSessionStats(prev => ({ ...prev, total: 0 }));
       }
     } catch (error) {
       console.error('Failed to load study session:', error);
-      setStudyWords(generateSampleStudyWords());
-      setSessionStats(prev => ({ ...prev, total: 5 }));
+      setError(error.message || 'Failed to load study session');
+      setStudyWords([]);
+      setSessionStats(prev => ({ ...prev, total: 0 }));
     } finally {
       setLoading(false);
     }
   };
-
-  const generateSampleStudyWords = () => [
-    {
-      id: 1,
-      word: "serendipity",
-      definitions: [{ 
-        definition: "The occurrence of events by chance in a happy way",
-        example: "It was pure serendipity that led me to find my dream job while browsing social media."
-      }],
-      difficulty: "intermediate",
-      mastery_level: 2,
-      pronunciation: "/ˌserənˈdipədē/"
-    },
-    {
-      id: 2,
-      word: "ephemeral",
-      definitions: [{ 
-        definition: "Lasting for a very short time",
-        example: "The beauty of cherry blossoms is ephemeral, lasting only a few weeks each spring."
-      }],
-      difficulty: "advanced",
-      mastery_level: 1,
-      pronunciation: "/əˈfem(ə)rəl/"
-    },
-    {
-      id: 3,
-      word: "ubiquitous",
-      definitions: [{ 
-        definition: "Present, appearing, or found everywhere",
-        example: "Smartphones have become ubiquitous in modern society."
-      }],
-      difficulty: "advanced",
-      mastery_level: 3,
-      pronunciation: "/yo͞oˈbikwədəs/"
-    },
-    {
-      id: 4,
-      word: "mellifluous",
-      definitions: [{ 
-        definition: "Sweet or musical; pleasant to hear",
-        example: "The singer's mellifluous voice captivated the entire audience."
-      }],
-      difficulty: "advanced",
-      mastery_level: 1,
-      pronunciation: "/məˈliflo͞oəs/"
-    },
-    {
-      id: 5,
-      word: "perspicacious",
-      definitions: [{ 
-        definition: "Having keen insight; mentally sharp",
-        example: "Her perspicacious analysis of the market trends impressed the board of directors."
-      }],
-      difficulty: "advanced",
-      mastery_level: 2,
-      pronunciation: "/ˌpərspəˈkāSHəs/"
-    }
-  ];
 
   const currentWord = studyWords[currentWordIndex];
   const progressPercentage = studyWords.length > 0 ? ((currentWordIndex + 1) / studyWords.length) * 100 : 0;
@@ -142,6 +86,7 @@ const StudyPage = () => {
     if (!currentWord) return;
 
     setSubmitting(true);
+    setError('');
     
     try {
       // Update word progress based on difficulty response
@@ -164,20 +109,7 @@ const StudyPage = () => {
       }
     } catch (error) {
       console.error('Failed to update word progress:', error);
-      // Continue anyway for demo
-      const isCorrect = difficulty === 'easy' || difficulty === 'medium';
-      setSessionStats(prev => ({
-        ...prev,
-        correct: isCorrect ? prev.correct + 1 : prev.correct,
-        incorrect: !isCorrect ? prev.incorrect + 1 : prev.incorrect
-      }));
-
-      if (currentWordIndex < studyWords.length - 1) {
-        setCurrentWordIndex(currentWordIndex + 1);
-        setShowDefinition(false);
-      } else {
-        setSessionComplete(true);
-      }
+      setError(error.message || 'Failed to save your review. Please try again.');
     } finally {
       setSubmitting(false);
     }
@@ -214,6 +146,9 @@ const StudyPage = () => {
             <p className="text-muted-foreground mb-6">
               You don't have any words due for review right now. Add some words to your library or check back later!
             </p>
+            {error && (
+              <p className="text-sm text-red-600 mb-4">{error}</p>
+            )}
             <div className="flex gap-2 justify-center">
               <Button asChild>
                 <Link to="/words">
@@ -349,6 +284,11 @@ const StudyPage = () => {
       </div>
 
       {/* Progress Bar */}
+      {error && (
+        <Alert className="mb-6" variant="destructive">
+          <AlertDescription>{error}</AlertDescription>
+        </Alert>
+      )}
       <Card className="mb-6">
         <CardContent className="p-4">
           <div className="flex items-center justify-between mb-2">

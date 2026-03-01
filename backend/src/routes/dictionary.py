@@ -1,15 +1,14 @@
-from fastapi import APIRouter, HTTPException, Depends
+from fastapi import APIRouter, HTTPException
 
 from src.models import WordLookupResponse, DictionaryResponse
 from src.services import dictionary_service
-from src.utils import get_current_user
 
 
 router = APIRouter(prefix='/api/dictionary', tags=['dictionary'])
 
 
 @router.get('/lookup/{word}',response_model=WordLookupResponse)
-async def lookup_word(word: str, current_user = Depends(get_current_user)):
+async def lookup_word(word: str):
     if not word or len(word.strip()) == 0:
         raise HTTPException(status_code=400, detail="Word cannot be empty")
     

@@ -48,6 +48,7 @@ class ReviewSessionResponse(BaseModel):
 class LearningStats(BaseModel):
     """User's overall learning statistics"""
     total_words_added: int
+    total_quizzes_taken: int
     words_learning: int  # Strength 0-2
     words_strong: int    # Strength 3-5
     words_mastered: int  # Strength 6
