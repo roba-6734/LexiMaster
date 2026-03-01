@@ -233,13 +233,6 @@ If you encounter any issues or have questions:
 3. Include your environment details and error logs
 
 
-## 🙏 Acknowledgments
-
-- Spaced repetition algorithm based on research by Piotr Wozniak
-- UI components built with Radix UI primitives
-- Icons provided by Lucide React
-- Built with modern web technologies for optimal performance
-
 ---
 
 **Happy Learning! 📚✨** 
