@@ -228,18 +228,10 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 If you encounter any issues or have questions:
 
-1. Check the [Issues](https://github.com/yourusername/WordMaster/issues) page
+1. Check the [Issues](https://github.com/roba-6734/WordMaster/issues) page
 2. Create a new issue with detailed information
 3. Include your environment details and error logs
 
-## 🔮 Roadmap
-
-- [ ] Mobile app development
-- [ ] Advanced analytics dashboard
-- [ ] Social learning features
-- [ ] Integration with popular learning platforms
-- [ ] AI-powered word difficulty assessment
-- [ ] Multi-language support
 
 ## 🙏 Acknowledgments
 
