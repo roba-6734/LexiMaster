@@ -48,9 +48,9 @@ function App() {
           <Route path="/quiz" element={
             <ProtectedRoute>
               <Layout>
-                <div className="container mx-auto p-6">
-                  <h1 className="text-3xl font-bold">Quiz</h1>
-                  <p className="text-muted-foreground mt-2">Coming soon...</p>
+                <div className="mx-auto w-full max-w-7xl px-6 py-8">
+                  <h1 className="text-3xl font-semibold">Quiz</h1>
+                  <p className="caption mt-2">Coming soon...</p>
                 </div>
               </Layout>
             </ProtectedRoute>
@@ -59,9 +59,9 @@ function App() {
           <Route path="/progress" element={
             <ProtectedRoute>
               <Layout>
-                <div className="container mx-auto p-6">
-                  <h1 className="text-3xl font-bold">Progress</h1>
-                  <p className="text-muted-foreground mt-2">Coming soon...</p>
+                <div className="mx-auto w-full max-w-7xl px-6 py-8">
+                  <h1 className="text-3xl font-semibold">Progress</h1>
+                  <p className="caption mt-2">Coming soon...</p>
                 </div>
               </Layout>
             </ProtectedRoute>

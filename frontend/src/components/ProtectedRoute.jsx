@@ -8,8 +8,11 @@ const ProtectedRoute = ({children}) =>{
 
     if(loading){
         return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
+      <div className="min-h-screen px-6 py-8 flex items-center justify-center">
+        <div className="flex flex-col items-center gap-3 rounded-lg border border-border bg-card p-6 shadow-lg shadow-slate-900/5">
+          <div className="animate-spin rounded-full h-10 w-10 border-2 border-secondary/25 border-t-primary"></div>
+          <p className="caption">Preparing your workspace...</p>
+        </div>
       </div>
     );
     }

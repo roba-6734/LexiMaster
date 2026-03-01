@@ -38,21 +38,21 @@ const LoginPage = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-100 p-4">
-      <Card className="w-full max-w-md">
-        <CardHeader className="text-center">
-          <div className="flex justify-center mb-4">
-            <div className="p-3 bg-primary rounded-full">
-              <BookOpen className="h-8 w-8 text-primary-foreground" />
+    <div className="min-h-screen px-6 py-8 flex items-center justify-center">
+      <Card className="w-full max-w-md border-border/80">
+        <CardHeader className="text-center p-6">
+          <div className="flex justify-center mb-2">
+            <div className="flex h-14 w-14 items-center justify-center rounded-xl bg-primary shadow-md shadow-primary/25">
+              <BookOpen className="h-7 w-7 text-primary-foreground" />
             </div>
           </div>
-          <CardTitle className="text-2xl font-bold">Welcome to WordMaster</CardTitle>
-          <CardDescription>
+          <CardTitle className="text-2xl font-semibold">Welcome Back</CardTitle>
+          <CardDescription className="caption">
             Sign in to continue your vocabulary learning journey
           </CardDescription>
         </CardHeader>
-        <CardContent>
-          <form onSubmit={handleSubmit} className="space-y-4">
+        <CardContent className="p-6 pt-0">
+          <form onSubmit={handleSubmit} className="space-y-5">
             {error && (
               <Alert variant="destructive">
                 <AlertDescription>{error}</AlertDescription>
@@ -62,7 +62,7 @@ const LoginPage = () => {
             <div className="space-y-2">
               <Label htmlFor="email">Email</Label>
               <div className="relative">
-                <Mail className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
+                <Mail className="absolute left-3 top-3 h-4 w-4 text-muted-foreground pointer-events-none" />
                 <Input
                   id="email"
                   type="email"
@@ -78,7 +78,7 @@ const LoginPage = () => {
             <div className="space-y-2">
               <Label htmlFor="password">Password</Label>
               <div className="relative">
-                <Lock className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
+                <Lock className="absolute left-3 top-3 h-4 w-4 text-muted-foreground pointer-events-none" />
                 <Input
                   id="password"
                   type="password"
@@ -104,9 +104,9 @@ const LoginPage = () => {
           </form>
           
           <div className="mt-6 text-center">
-            <p className="text-sm text-muted-foreground">
+            <p className="caption">
               Don't have an account?{' '}
-              <Link to="/register" className="text-primary hover:underline font-medium">
+              <Link to="/register" className="text-primary hover:text-secondary transition-colors font-semibold">
                 Sign up
               </Link>
             </p>

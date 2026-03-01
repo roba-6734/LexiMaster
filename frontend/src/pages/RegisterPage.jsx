@@ -64,13 +64,15 @@ const RegisterPage = () => {
 
   if (success) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-green-50 to-emerald-100 p-4">
+      <div className="min-h-screen px-6 py-8 flex items-center justify-center">
         <Card className="w-full max-w-md">
-          <CardContent className="pt-6">
+          <CardContent className="p-6">
             <div className="text-center">
-              <CheckCircle className="h-16 w-16 text-green-500 mx-auto mb-4" />
-              <h2 className="text-2xl font-bold text-green-700 mb-2">Registration Successful!</h2>
-              <p className="text-muted-foreground">
+              <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-accent/10">
+                <CheckCircle className="h-10 w-10 text-accent" />
+              </div>
+              <h2 className="text-2xl font-semibold text-foreground mb-2">Registration Successful!</h2>
+              <p className="caption">
                 Your account has been created. Redirecting to login...
               </p>
             </div>
@@ -81,21 +83,21 @@ const RegisterPage = () => {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-purple-50 to-pink-100 p-4">
-      <Card className="w-full max-w-md">
-        <CardHeader className="text-center">
-          <div className="flex justify-center mb-4">
-            <div className="p-3 bg-primary rounded-full">
-              <BookOpen className="h-8 w-8 text-primary-foreground" />
+    <div className="min-h-screen px-6 py-8 flex items-center justify-center">
+      <Card className="w-full max-w-md border-border/80">
+        <CardHeader className="text-center p-6">
+          <div className="flex justify-center mb-2">
+            <div className="flex h-14 w-14 items-center justify-center rounded-xl bg-primary shadow-md shadow-primary/25">
+              <BookOpen className="h-7 w-7 text-primary-foreground" />
             </div>
           </div>
-          <CardTitle className="text-2xl font-bold">Join WordMaster</CardTitle>
-          <CardDescription>
+          <CardTitle className="text-2xl font-semibold">Create Account</CardTitle>
+          <CardDescription className="caption">
             Create your account and start building your vocabulary
           </CardDescription>
         </CardHeader>
-        <CardContent>
-          <form onSubmit={handleSubmit} className="space-y-4">
+        <CardContent className="p-6 pt-0">
+          <form onSubmit={handleSubmit} className="space-y-5">
             {error && (
               <Alert variant="destructive">
                 <AlertDescription>{error}</AlertDescription>
@@ -105,7 +107,7 @@ const RegisterPage = () => {
             <div className="space-y-2">
               <Label htmlFor="fullName">Full Name</Label>
               <div className="relative">
-                <User className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
+                <User className="absolute left-3 top-3 h-4 w-4 text-muted-foreground pointer-events-none" />
                 <Input
                   id="displayName"
                   name="displayName"
@@ -122,7 +124,7 @@ const RegisterPage = () => {
             <div className="space-y-2">
               <Label htmlFor="email">Email</Label>
               <div className="relative">
-                <Mail className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
+                <Mail className="absolute left-3 top-3 h-4 w-4 text-muted-foreground pointer-events-none" />
                 <Input
                   id="email"
                   name="email"
@@ -139,7 +141,7 @@ const RegisterPage = () => {
             <div className="space-y-2">
               <Label htmlFor="password">Password</Label>
               <div className="relative">
-                <Lock className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
+                <Lock className="absolute left-3 top-3 h-4 w-4 text-muted-foreground pointer-events-none" />
                 <Input
                   id="password"
                   name="password"
@@ -156,7 +158,7 @@ const RegisterPage = () => {
             <div className="space-y-2">
               <Label htmlFor="confirmPassword">Confirm Password</Label>
               <div className="relative">
-                <Lock className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
+                <Lock className="absolute left-3 top-3 h-4 w-4 text-muted-foreground pointer-events-none" />
                 <Input
                   id="confirmPassword"
                   name="confirmPassword"
@@ -183,9 +185,9 @@ const RegisterPage = () => {
           </form>
           
           <div className="mt-6 text-center">
-            <p className="text-sm text-muted-foreground">
+            <p className="caption">
               Already have an account?{' '}
-              <Link to="/login" className="text-primary hover:underline font-medium">
+              <Link to="/login" className="text-primary hover:text-secondary transition-colors font-semibold">
                 Sign in
               </Link>
             </p>

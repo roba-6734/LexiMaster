@@ -125,11 +125,11 @@ const StudyPage = () => {
 
   if (loading) {
     return (
-      <div className="container mx-auto p-6">
+      <div className="mx-auto w-full max-w-7xl px-6 py-8">
         <div className="flex items-center justify-center min-h-[400px]">
-          <div className="text-center">
-            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4"></div>
-            <p className="text-muted-foreground">Loading your study session...</p>
+          <div className="flex items-center gap-3 rounded-lg border border-border bg-card px-5 py-4 shadow-lg shadow-slate-900/5">
+            <div className="animate-spin rounded-full h-8 w-8 border-2 border-secondary/25 border-t-primary"></div>
+            <p className="caption">Loading your study session...</p>
           </div>
         </div>
       </div>
@@ -138,16 +138,16 @@ const StudyPage = () => {
 
   if (studyWords.length === 0) {
     return (
-      <div className="container mx-auto p-6">
-        <Card>
+      <div className="mx-auto w-full max-w-7xl px-6 py-8">
+        <Card className="border-border/80">
           <CardContent className="p-12 text-center">
-            <BookOpen className="h-16 w-16 text-muted-foreground mx-auto mb-4" />
-            <h2 className="text-2xl font-bold mb-2">No Words to Study</h2>
-            <p className="text-muted-foreground mb-6">
+            <BookOpen className="h-16 w-16 text-primary/70 mx-auto mb-4" />
+            <h2 className="text-2xl font-semibold mb-2">No Words to Study</h2>
+            <p className="caption mb-6">
               You don't have any words due for review right now. Add some words to your library or check back later!
             </p>
             {error && (
-              <p className="text-sm text-red-600 mb-4">{error}</p>
+              <p className="text-sm text-destructive mb-4">{error}</p>
             )}
             <div className="flex gap-2 justify-center">
               <Button asChild>
@@ -174,8 +174,8 @@ const StudyPage = () => {
     const performance = accuracy >= 80 ? 'excellent' : accuracy >= 60 ? 'good' : 'needs-improvement';
     
     return (
-      <div className="container mx-auto p-6">
-        <Card className="max-w-2xl mx-auto">
+      <div className="mx-auto w-full max-w-7xl px-6 py-8">
+        <Card className="max-w-2xl mx-auto border-border/80">
           <CardHeader className="text-center">
             <div className="flex justify-center mb-4">
               {performance === 'excellent' ? (
@@ -186,11 +186,11 @@ const StudyPage = () => {
                 <Target className="h-16 w-16 text-blue-500" />
               )}
             </div>
-            <CardTitle className="text-2xl">
+            <CardTitle className="text-2xl font-semibold">
               {performance === 'excellent' ? 'Excellent Work!' :
                performance === 'good' ? 'Good Job!' : 'Keep Practicing!'}
             </CardTitle>
-            <CardDescription>
+            <CardDescription className="caption">
               You've completed your study session
             </CardDescription>
           </CardHeader>
@@ -198,17 +198,17 @@ const StudyPage = () => {
           <CardContent className="space-y-6">
             {/* Session Stats */}
             <div className="grid grid-cols-3 gap-4 text-center">
-              <div className="p-4 bg-muted/50 rounded-lg">
-                <div className="text-2xl font-bold text-primary">{sessionStats.total}</div>
-                <div className="text-sm text-muted-foreground">Words Studied</div>
+              <div className="p-4 rounded-lg bg-primary/10">
+                <div className="text-2xl font-semibold text-primary">{sessionStats.total}</div>
+                <div className="caption">Words Studied</div>
               </div>
-              <div className="p-4 bg-green-50 rounded-lg">
-                <div className="text-2xl font-bold text-green-600">{sessionStats.correct}</div>
-                <div className="text-sm text-muted-foreground">Correct</div>
+              <div className="p-4 rounded-lg bg-accent/10">
+                <div className="text-2xl font-semibold text-accent">{sessionStats.correct}</div>
+                <div className="caption">Correct</div>
               </div>
-              <div className="p-4 bg-red-50 rounded-lg">
-                <div className="text-2xl font-bold text-red-600">{sessionStats.incorrect}</div>
-                <div className="text-sm text-muted-foreground">Needs Review</div>
+              <div className="p-4 rounded-lg bg-rose-100">
+                <div className="text-2xl font-semibold text-rose-600">{sessionStats.incorrect}</div>
+                <div className="caption">Needs Review</div>
               </div>
             </div>
 
@@ -263,15 +263,15 @@ const StudyPage = () => {
   }
 
   return (
-    <div className="container mx-auto p-6 max-w-4xl">
+    <div className="mx-auto w-full max-w-5xl px-6 py-8">
       {/* Header */}
-      <div className="flex items-center justify-between mb-6">
+      <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between mb-6">
         <div>
-          <h1 className="text-3xl font-bold flex items-center gap-2">
+          <h1 className="text-3xl font-semibold flex items-center gap-2">
             <Brain className="h-8 w-8 text-primary" />
             Study Session
           </h1>
-          <p className="text-muted-foreground mt-1">
+          <p className="caption mt-1">
             Review your vocabulary with spaced repetition
           </p>
         </div>
@@ -289,11 +289,11 @@ const StudyPage = () => {
           <AlertDescription>{error}</AlertDescription>
         </Alert>
       )}
-      <Card className="mb-6">
+      <Card className="mb-6 border-border/80">
         <CardContent className="p-4">
           <div className="flex items-center justify-between mb-2">
             <span className="text-sm font-medium">Progress</span>
-            <span className="text-sm text-muted-foreground">
+            <span className="caption">
               {currentWordIndex + 1} of {studyWords.length}
             </span>
           </div>
@@ -312,10 +312,10 @@ const StudyPage = () => {
       {/* Action Buttons */}
       <div className="flex justify-center gap-4 mb-6">
         {showDefinition && (
-          <div className="flex gap-2">
+          <div className="flex flex-wrap justify-center gap-2">
             <Button 
               variant="outline" 
-              className="text-red-600 border-red-200 hover:bg-red-50"
+              className="text-rose-600 border-rose-200 hover:bg-rose-50"
               onClick={() => handleDifficultyResponse('hard')}
               disabled={submitting}
             >
@@ -324,7 +324,7 @@ const StudyPage = () => {
             </Button>
             <Button 
               variant="outline"
-              className="text-yellow-600 border-yellow-200 hover:bg-yellow-50"
+              className="text-amber-600 border-amber-200 hover:bg-amber-50"
               onClick={() => handleDifficultyResponse('medium')}
               disabled={submitting}
             >
@@ -332,7 +332,7 @@ const StudyPage = () => {
               Medium
             </Button>
             <Button 
-              className="text-green-600 bg-green-50 border-green-200 hover:bg-green-100"
+              className="bg-accent text-accent-foreground hover:bg-accent/90"
               onClick={() => handleDifficultyResponse('easy')}
               disabled={submitting}
             >
@@ -344,22 +344,22 @@ const StudyPage = () => {
       </div>
 
       {/* Session Stats */}
-      <Card>
+      <Card className="border-border/80">
         <CardContent className="p-4">
           <div className="grid grid-cols-3 gap-4 text-center text-sm">
             <div>
-              <div className="font-medium text-green-600">{sessionStats.correct}</div>
-              <div className="text-muted-foreground">Correct</div>
+              <div className="font-semibold text-accent">{sessionStats.correct}</div>
+              <div className="caption">Correct</div>
             </div>
             <div>
-              <div className="font-medium text-red-600">{sessionStats.incorrect}</div>
-              <div className="text-muted-foreground">Incorrect</div>
+              <div className="font-semibold text-rose-600">{sessionStats.incorrect}</div>
+              <div className="caption">Incorrect</div>
             </div>
             <div>
-              <div className="font-medium text-primary">
+              <div className="font-semibold text-primary">
                 {sessionStats.total - sessionStats.correct - sessionStats.incorrect}
               </div>
-              <div className="text-muted-foreground">Remaining</div>
+              <div className="caption">Remaining</div>
             </div>
           </div>
         </CardContent>

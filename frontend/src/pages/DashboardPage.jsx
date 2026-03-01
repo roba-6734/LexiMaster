@@ -46,8 +46,11 @@ const DashboardPage = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
+      <div className="min-h-screen px-6 py-8 flex items-center justify-center">
+        <div className="flex items-center gap-3 rounded-lg border border-border bg-card px-5 py-4 shadow-lg shadow-slate-900/5">
+          <div className="animate-spin rounded-full h-8 w-8 border-2 border-secondary/25 border-t-primary"></div>
+          <p className="caption">Loading dashboard...</p>
+        </div>
       </div>
     );
   }
@@ -55,16 +58,16 @@ const DashboardPage = () => {
   const progressPercentage = stats ? Math.min((stats.total_words_added / 100) * 100, 100) : 0;
 
   return (
-    <div className="container mx-auto p-6 space-y-6">
+    <div className="mx-auto w-full max-w-7xl px-6 py-8 space-y-6">
       {/* Welcome Header */}
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
         <div>
-          <h1 className="text-3xl font-bold">Welcome back, {user?.full_name || user?.email}!</h1>
-          <p className="text-muted-foreground mt-1">
+          <h1 className="text-3xl font-semibold">Welcome back, {user?.full_name || user?.email}!</h1>
+          <p className="caption mt-1">
             Continue your vocabulary learning journey
           </p>
         </div>
-        <div className="flex gap-2">
+        <div className="flex flex-wrap gap-2">
           <Button asChild>
             <Link to="/words">
               <Plus className="h-4 w-4 mr-2" />
@@ -82,55 +85,55 @@ const DashboardPage = () => {
 
       {/* Stats Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        <Card>
+        <Card className="border-border/80">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Total Words</CardTitle>
-            <BookOpen className="h-4 w-4 text-muted-foreground" />
+            <BookOpen className="h-4 w-4 text-primary" />
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">{stats?.total_words_added || 0}</div>
-            <p className="text-xs text-muted-foreground">
+            <p className="caption">
               {stats?.reviews_this_week || 0} reviews this week
             </p>
           </CardContent>
         </Card>
 
-        <Card>
+        <Card className="border-border/80">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Due Today</CardTitle>
-            <Calendar className="h-4 w-4 text-muted-foreground" />
+            <Calendar className="h-4 w-4 text-secondary" />
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">{stats?.due_for_review || 0}</div>
-            <p className="text-xs text-muted-foreground">
+            <p className="caption">
               Words to review
             </p>
           </CardContent>
         </Card>
 
-        <Card>
+        <Card className="border-border/80">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Accuracy</CardTitle>
-            <Target className="h-4 w-4 text-muted-foreground" />
+            <Target className="h-4 w-4 text-accent" />
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">
               {stats?.overall_accuracy ? `${Math.round(stats.overall_accuracy)}%` : '0%'}
             </div>
-            <p className="text-xs text-muted-foreground">
+            <p className="caption">
               Overall performance
             </p>
           </CardContent>
         </Card>
 
-        <Card>
+        <Card className="border-border/80">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Streak</CardTitle>
-            <Award className="h-4 w-4 text-muted-foreground" />
+            <Award className="h-4 w-4 text-amber-500" />
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">{stats?.current_streak || 0}</div>
-            <p className="text-xs text-muted-foreground">
+            <p className="caption">
               Days in a row
             </p>
           </CardContent>
@@ -139,13 +142,13 @@ const DashboardPage = () => {
 
       {/* Progress Section */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <Card>
+        <Card className="border-border/80">
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <TrendingUp className="h-5 w-5" />
               Learning Progress
             </CardTitle>
-            <CardDescription>
+            <CardDescription className="caption">
               Your vocabulary building journey
             </CardDescription>
           </CardHeader>
@@ -159,29 +162,29 @@ const DashboardPage = () => {
             </div>
             
             <div className="grid grid-cols-2 gap-4 pt-4">
-              <div className="text-center">
-                <div className="text-2xl font-bold text-green-600">
+              <div className="text-center rounded-lg bg-accent/10 p-4">
+                <div className="text-2xl font-semibold text-accent">
                   {stats?.words_mastered || 0}
                 </div>
-                <div className="text-sm text-muted-foreground">Mastered</div>
+                <div className="caption">Mastered</div>
               </div>
-              <div className="text-center">
-                <div className="text-2xl font-bold text-blue-600">
+              <div className="text-center rounded-lg bg-primary/10 p-4">
+                <div className="text-2xl font-semibold text-primary">
                   {stats?.words_learning || 0}
                 </div>
-                <div className="text-sm text-muted-foreground">Learning</div>
+                <div className="caption">Learning</div>
               </div>
             </div>
           </CardContent>
         </Card>
 
-        <Card>
+        <Card className="border-border/80">
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <Brain className="h-5 w-5" />
               Quick Actions
             </CardTitle>
-            <CardDescription>
+            <CardDescription className="caption">
               Continue your learning
             </CardDescription>
           </CardHeader>
@@ -224,10 +227,10 @@ const DashboardPage = () => {
 
       {/* Recent Words */}
       {recentWords.length > 0 && (
-        <Card>
+        <Card className="border-border/80">
           <CardHeader>
             <CardTitle>Recent Words</CardTitle>
-            <CardDescription>
+            <CardDescription className="caption">
               Words you've added recently
             </CardDescription>
           </CardHeader>
@@ -236,10 +239,10 @@ const DashboardPage = () => {
               {recentWords.map((word) => (
                 <div
                   key={word.id}
-                  className="p-4 border rounded-lg hover:bg-muted/50 transition-colors"
+                  className="rounded-lg border border-border/70 bg-card p-4 transition-colors hover:bg-muted/40"
                 >
                   <div className="font-medium">{word.word}</div>
-                  <div className="text-sm text-muted-foreground mt-1">
+                  <div className="caption mt-1">
                     {word.definitions?.[0]?.definition || 'No definition available'}
                   </div>
                   <div className="flex items-center justify-between mt-2">

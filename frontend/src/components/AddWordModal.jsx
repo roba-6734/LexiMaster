@@ -77,21 +77,23 @@ const AddWordModal = ({ isOpen, onClose, onWordAdded }) => {
 
   const getDifficultyColor = (difficulty) => {
     switch (difficulty) {
-      case 'beginner': return 'bg-green-100 text-green-800 hover:bg-green-200';
-      case 'intermediate': return 'bg-yellow-100 text-yellow-800 hover:bg-yellow-200';
-      case 'advanced': return 'bg-red-100 text-red-800 hover:bg-red-200';
-      default: return 'bg-gray-100 text-gray-800 hover:bg-gray-200';
+      case 'beginner': return 'bg-accent/10 text-accent hover:bg-accent/20';
+      case 'intermediate': return 'bg-amber-100 text-amber-700 hover:bg-amber-200';
+      case 'advanced': return 'bg-rose-100 text-rose-700 hover:bg-rose-200';
+      default: return 'bg-muted text-muted-foreground hover:bg-muted/80';
     }
   };
 
   if (success) {
     return (
       <Dialog open={isOpen} onOpenChange={handleClose}>
-        <DialogContent className="sm:max-w-md">
+        <DialogContent className="sm:max-w-md border-border/80">
           <div className="flex flex-col items-center justify-center py-8">
-            <CheckCircle className="h-16 w-16 text-green-500 mb-4" />
-            <h3 className="text-lg font-semibold mb-2">Word Added Successfully!</h3>
-            <p className="text-muted-foreground text-center">
+            <div className="mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-accent/10">
+              <CheckCircle className="h-10 w-10 text-accent" />
+            </div>
+            <h3 className="text-2xl font-semibold mb-2">Word Added Successfully!</h3>
+            <p className="caption text-center">
               "{word}" has been added to your vocabulary.
             </p>
           </div>
@@ -102,13 +104,13 @@ const AddWordModal = ({ isOpen, onClose, onWordAdded }) => {
 
   return (
     <Dialog open={isOpen} onOpenChange={handleClose}>
-      <DialogContent className="sm:max-w-2xl max-h-[90vh] overflow-y-auto">
+      <DialogContent className="sm:max-w-2xl max-h-[90vh] overflow-y-auto border-border/80">
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2">
             <Plus className="h-5 w-5" />
             Add New Word
           </DialogTitle>
-          <DialogDescription>
+          <DialogDescription className="caption">
             Add a new word to your vocabulary. You can look it up automatically or enter details manually.
           </DialogDescription>
         </DialogHeader>

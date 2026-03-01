@@ -79,20 +79,20 @@ const WordsPage = () => {
 
   const getDifficultyColor = (difficulty) => {
     switch (difficulty) {
-      case 'beginner': return 'bg-green-100 text-green-800';
-      case 'easy': return 'bg-green-100 text-green-800';
-      case 'intermediate': return 'bg-yellow-100 text-yellow-800';
-      case 'advanced': return 'bg-red-100 text-red-800';
-      case 'hard': return 'bg-red-100 text-red-800';
-      default: return 'bg-gray-100 text-gray-800';
+      case 'beginner': return 'bg-accent/10 text-accent border-transparent';
+      case 'easy': return 'bg-accent/10 text-accent border-transparent';
+      case 'intermediate': return 'bg-amber-100 text-amber-700 border-transparent';
+      case 'advanced': return 'bg-rose-100 text-rose-700 border-transparent';
+      case 'hard': return 'bg-rose-100 text-rose-700 border-transparent';
+      default: return 'bg-muted text-muted-foreground border-transparent';
     }
   };
 
   const getMasteryColor = (level) => {
-    if (level >= 4) return 'bg-green-500';
-    if (level >= 3) return 'bg-yellow-500';
-    if (level >= 2) return 'bg-orange-500';
-    return 'bg-red-500';
+    if (level >= 4) return 'bg-accent';
+    if (level >= 3) return 'bg-secondary';
+    if (level >= 2) return 'bg-amber-500';
+    return 'bg-rose-500';
   };
 
   const handleWordAdded = () => {
@@ -114,24 +114,27 @@ const handleStudyWord = (word) => {
 
   if (loading) {
     return (
-      <div className="container mx-auto p-6">
+      <div className="mx-auto w-full max-w-7xl px-6 py-8">
         <div className="flex items-center justify-center min-h-[400px]">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
+          <div className="flex items-center gap-3 rounded-lg border border-border bg-card px-5 py-4 shadow-lg shadow-slate-900/5">
+            <div className="animate-spin rounded-full h-8 w-8 border-2 border-secondary/25 border-t-primary"></div>
+            <p className="caption">Loading words...</p>
+          </div>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="container mx-auto p-6 space-y-6">
+    <div className="mx-auto w-full max-w-7xl px-6 py-8 space-y-6">
       {/* Header */}
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
         <div>
-          <h1 className="text-3xl font-bold flex items-center gap-2">
+          <h1 className="text-3xl font-semibold flex items-center gap-2">
             <BookOpen className="h-8 w-8 text-primary" />
             Words Library
           </h1>
-          <p className="text-muted-foreground mt-1">
+          <p className="caption mt-1">
             Manage your vocabulary collection ({filteredWords.length} words)
           </p>
         </div>
@@ -141,15 +144,15 @@ const handleStudyWord = (word) => {
         </Button>
       </div>
       {error && (
-        <Card>
-          <CardContent className="p-4 text-sm text-red-600">
+        <Card className="border-destructive/20">
+          <CardContent className="p-4 text-sm text-destructive">
             {error}
           </CardContent>
         </Card>
       )}
 
       {/* Search and Filters */}
-      <Card>
+      <Card className="border-border/80">
         <CardContent className="p-6">
           <div className="flex flex-col md:flex-row gap-4">
             {/* Search */}
@@ -229,11 +232,11 @@ const handleStudyWord = (word) => {
       {/* Words Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {filteredWords.map((word) => (
-          <Card key={word.id} className="hover:shadow-md transition-shadow hover:cursor-pointer " onClick ={()=>(setSelectedWord(word))}>
+          <Card key={word.id} className="border-border/80 transition-all hover:-translate-y-0.5 hover:shadow-xl hover:shadow-slate-900/10 cursor-pointer" onClick ={()=>(setSelectedWord(word))}>
             <CardHeader className="pb-3">
               <div className="flex items-start justify-between">
                 <div className="flex-1">
-                  <CardTitle className="text-xl font-bold text-primary">
+                  <CardTitle className="text-xl font-semibold text-primary">
                     {word.word}
                   </CardTitle>
                   <div className="flex items-center gap-2 mt-2">
@@ -242,7 +245,7 @@ const handleStudyWord = (word) => {
                     </Badge>
                     <div className="flex items-center gap-1">
                       <div className={`w-2 h-2 rounded-full ${getMasteryColor(word.mastery_level)}`}></div>
-                      <span className="text-xs text-muted-foreground">
+                      <span className="caption text-xs">
                         Level {word.mastery_level}
                       </span>
                     </div>
@@ -280,11 +283,11 @@ const handleStudyWord = (word) => {
             </CardHeader>
             
             <CardContent>
-              <p className="text-muted-foreground mb-3">
+              <p className="caption mb-3">
                 {word.definitions?.[0]?.definition || 'No definition available'}
               </p>
               
-              <div className="flex items-center justify-between text-sm text-muted-foreground">
+              <div className="flex flex-col gap-2 text-sm text-muted-foreground sm:flex-row sm:items-center sm:justify-between">
                 <div className="flex items-center gap-1">
                   <Calendar className="h-3 w-3" />
                   Added {new Date(word.added_at).toLocaleDateString()}
@@ -301,11 +304,11 @@ const handleStudyWord = (word) => {
 
       {/* Empty State */}
       {filteredWords.length === 0 && (
-        <Card>
+        <Card className="border-border/80">
           <CardContent className="p-12 text-center">
-            <BookOpen className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
-            <h3 className="text-lg font-semibold mb-2">No words found</h3>
-            <p className="text-muted-foreground mb-4">
+            <BookOpen className="h-12 w-12 text-primary/70 mx-auto mb-4" />
+            <h3 className="text-2xl font-semibold mb-2">No words found</h3>
+            <p className="caption mb-4">
               {searchTerm ? 'Try adjusting your search or filters' : 'Start building your vocabulary by adding your first word'}
             </p>
             <Button onClick={() => setShowAddModal(true)}>
@@ -326,7 +329,7 @@ const handleStudyWord = (word) => {
           >
             Previous
           </Button>
-          <span className="flex items-center px-4 text-sm text-muted-foreground">
+          <span className="flex items-center px-4 caption">
             Page {currentPage} of {totalPages}
           </span>
           <Button 

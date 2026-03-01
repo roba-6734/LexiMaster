@@ -21,10 +21,10 @@ const AnimatedFlashcard = ({ word, onFlip, isFlipped, onPronounce }) => {
 
   const getDifficultyColor = (difficulty) => {
     switch (difficulty) {
-      case 'beginner': return 'bg-green-100 text-green-800';
-      case 'intermediate': return 'bg-yellow-100 text-yellow-800';
-      case 'advanced': return 'bg-red-100 text-red-800';
-      default: return 'bg-gray-100 text-gray-800';
+      case 'beginner': return 'bg-accent/10 text-accent border-transparent';
+      case 'intermediate': return 'bg-amber-100 text-amber-700 border-transparent';
+      case 'advanced': return 'bg-rose-100 text-rose-700 border-transparent';
+      default: return 'bg-muted text-muted-foreground border-transparent';
     }
   };
 

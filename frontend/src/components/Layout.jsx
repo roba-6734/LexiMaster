@@ -43,21 +43,24 @@ const Layout = ({ children }) => {
   };
 
   return (
-    <div className="min-h-screen bg-background w-full flex flex-col">
+    <div className="min-h-screen w-full bg-background flex flex-col">
       {/* Header */}
-      <header className="border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-        <div className="container mx-auto px-4">
-          <div className="flex h-16 items-center justify-between">
+      <header className="sticky top-0 z-30 border-b border-border/80 bg-background/90 backdrop-blur">
+        <div className="mx-auto w-full max-w-7xl px-6">
+          <div className="flex h-16 items-center justify-between gap-4">
             {/* Logo */}
-            <Link to="/dashboard" className="flex items-center space-x-2">
-              <div className="p-2 bg-primary rounded-lg">
-                <BookOpen className="h-6 w-6 text-primary-foreground" />
+            <Link to="/dashboard" className="flex items-center gap-3">
+              <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary shadow-md shadow-primary/20">
+                <BookOpen className="h-5 w-5 text-primary-foreground" />
               </div>
-              <span className="text-xl font-bold">WordMaster</span>
+              <div className="leading-tight">
+                <p className="text-lg font-semibold">WordMaster</p>
+                <p className="text-xs text-muted-foreground">Vocabulary Studio</p>
+              </div>
             </Link>
 
             {/* Navigation */}
-            <nav className="hidden md:flex items-center space-x-1">
+            <nav className="hidden md:flex items-center gap-1 rounded-lg bg-card p-1 border border-border shadow-sm">
               {navigation.map((item) => {
                 const Icon = item.icon;
                 return (
@@ -65,7 +68,7 @@ const Layout = ({ children }) => {
                     key={item.name}
                     variant={isActive(item.href) ? "default" : "ghost"}
                     asChild
-                    className="flex items-center space-x-2"
+                    className="h-9 min-w-0 px-3"
                   >
                     <Link to={item.href}>
                       <Icon className="h-4 w-4" />
@@ -79,11 +82,11 @@ const Layout = ({ children }) => {
             {/* User Menu */}
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button variant="ghost" className="flex items-center space-x-2">
-                  <div className="w-8 h-8 bg-primary rounded-full flex items-center justify-center">
+                <Button variant="outline" className="flex items-center gap-2 pl-2 pr-3">
+                  <div className="h-8 w-8 bg-primary rounded-full flex items-center justify-center">
                     <User className="h-4 w-4 text-primary-foreground" />
                   </div>
-                  <span className="hidden md:block">
+                  <span className="hidden md:block max-w-[180px] truncate text-sm">
                     {user?.full_name || user?.email}
                   </span>
                 </Button>
@@ -109,9 +112,9 @@ const Layout = ({ children }) => {
       </header>
 
       {/* Mobile Navigation */}
-      <nav className="md:hidden border-b bg-background">
-        <div className="container mx-auto px-4">
-          <div className="flex space-x-1 py-2 overflow-x-auto">
+      <nav className="md:hidden border-b border-border/80 bg-background/95">
+        <div className="mx-auto w-full max-w-7xl px-6">
+          <div className="flex gap-1 py-2 overflow-x-auto">
             {navigation.map((item) => {
               const Icon = item.icon;
               return (
@@ -120,7 +123,7 @@ const Layout = ({ children }) => {
                   variant={isActive(item.href) ? "default" : "ghost"}
                   size="sm"
                   asChild
-                  className="flex items-center space-x-1 whitespace-nowrap"
+                  className="whitespace-nowrap"
                 >
                   <Link to={item.href}>
                     <Icon className="h-4 w-4" />
@@ -139,16 +142,16 @@ const Layout = ({ children }) => {
       </main>
 
       {/* Footer */}
-      <footer className="border-t bg-muted/50 ">
-        <div className="container mx-auto px-4 py-6">
+      <footer className="border-t border-border bg-card/60">
+        <div className="mx-auto w-full max-w-7xl px-6 py-6">
           <div className="flex flex-col md:flex-row justify-between items-center">
-            <div className="flex items-center space-x-2 mb-4 md:mb-0">
+            <div className="flex items-center gap-2 mb-4 md:mb-0">
               <BookOpen className="h-5 w-5 text-muted-foreground" />
-              <span className="text-sm text-muted-foreground">
+              <span className="caption">
                 WordMaster - Build your vocabulary
               </span>
             </div>
-            <div className="text-sm text-muted-foreground">
+            <div className="caption">
               © 2024 WordMaster. All rights reserved.
             </div>
           </div>

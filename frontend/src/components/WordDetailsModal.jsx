@@ -45,18 +45,18 @@ const WordDetailsModal = ({ isOpen, onClose, word, onEdit, onDelete, onStudy }) 
 
   const getDifficultyColor = (difficulty) => {
     switch (difficulty) {
-      case 'beginner': return 'bg-green-100 text-green-800';
-      case 'intermediate': return 'bg-yellow-100 text-yellow-800';
-      case 'advanced': return 'bg-red-100 text-red-800';
-      default: return 'bg-gray-100 text-gray-800';
+      case 'beginner': return 'bg-accent/10 text-accent border-transparent';
+      case 'intermediate': return 'bg-amber-100 text-amber-700 border-transparent';
+      case 'advanced': return 'bg-rose-100 text-rose-700 border-transparent';
+      default: return 'bg-muted text-muted-foreground border-transparent';
     }
   };
 
   const getMasteryColor = (level) => {
-    if (level >= 4) return 'text-green-600';
-    if (level >= 3) return 'text-yellow-600';
-    if (level >= 2) return 'text-orange-600';
-    return 'text-red-600';
+    if (level >= 4) return 'text-accent';
+    if (level >= 3) return 'text-secondary';
+    if (level >= 2) return 'text-amber-600';
+    return 'text-rose-600';
   };
 
   const getMasteryLabel = (level) => {
@@ -101,24 +101,25 @@ const WordDetailsModal = ({ isOpen, onClose, word, onEdit, onDelete, onStudy }) 
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="sm:max-w-3xl max-h-[90vh] overflow-y-auto">
+      <DialogContent className="sm:max-w-3xl max-h-[90vh] overflow-y-auto border-border/80">
         <DialogHeader>
           <div className="flex items-start justify-between">
             <div className="flex-1">
-              <DialogTitle className="text-2xl font-bold text-primary flex items-center gap-3">
+              <DialogTitle className="text-2xl font-semibold text-primary flex items-center gap-3">
                 {word.word}
                 <Button 
                   variant="ghost" 
                   size="sm" 
                   onClick={playPronunciation}
                   disabled={playingAudio}
+                  className="h-8 w-8 min-w-0 p-0"
                 >
                   <Volume2 className={`h-4 w-4 ${playingAudio ? 'animate-pulse' : ''}`} />
                 </Button>
               </DialogTitle>
               
               {word.pronunciation && (
-                <DialogDescription className="text-lg mt-1">
+                <DialogDescription className="text-lg mt-1 text-secondary">
                   {word.pronunciation}
                 </DialogDescription>
               )}
@@ -172,7 +173,7 @@ const WordDetailsModal = ({ isOpen, onClose, word, onEdit, onDelete, onStudy }) 
 
         <div className="space-y-6">
           {/* Learning Progress */}
-          <div className="bg-muted/50 p-4 rounded-lg">
+          <div className="bg-muted/50 p-4 rounded-lg border border-border/60">
             <h3 className="font-semibold mb-3 flex items-center gap-2">
               <TrendingUp className="h-4 w-4" />
               Learning Progress
@@ -224,7 +225,7 @@ const WordDetailsModal = ({ isOpen, onClose, word, onEdit, onDelete, onStudy }) 
             
            <div className="space-y-4">
             {word.definitions?.slice(0, 3).map((def, index) => (
-                <div key={index} className="border-l-4 border-primary/20 pl-4">
+                <div key={index} className="rounded-lg border border-border/70 bg-card px-4 py-3">
                   <div className="flex items-start gap-2">
                     <Badge variant="outline" className="text-xs mt-0.5">
                       {index + 1}
@@ -232,7 +233,7 @@ const WordDetailsModal = ({ isOpen, onClose, word, onEdit, onDelete, onStudy }) 
                     <div className="flex-1">
                       <p className="text-foreground mb-2">{def.definition}</p>
                       {def.example && (
-                        <p className="text-muted-foreground italic text-sm">
+                        <p className="caption italic">
                           "{def.example}"
                         </p>
                       )}
@@ -255,32 +256,32 @@ const WordDetailsModal = ({ isOpen, onClose, word, onEdit, onDelete, onStudy }) 
               </h3>
               
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                <div className="text-center p-3 bg-muted/50 rounded-lg">
-                  <div className="text-2xl font-bold text-primary">
+                <div className="text-center p-3 bg-primary/10 rounded-lg">
+                  <div className="text-2xl font-semibold text-primary">
                     {word.study_stats.total_reviews || 0}
                   </div>
-                  <div className="text-xs text-muted-foreground">Total Reviews</div>
+                  <div className="caption text-xs">Total Reviews</div>
                 </div>
                 
-                <div className="text-center p-3 bg-muted/50 rounded-lg">
-                  <div className="text-2xl font-bold text-green-600">
+                <div className="text-center p-3 bg-accent/10 rounded-lg">
+                  <div className="text-2xl font-semibold text-accent">
                     {word.study_stats.correct_answers || 0}
                   </div>
-                  <div className="text-xs text-muted-foreground">Correct</div>
+                  <div className="caption text-xs">Correct</div>
                 </div>
                 
-                <div className="text-center p-3 bg-muted/50 rounded-lg">
-                  <div className="text-2xl font-bold text-red-600">
+                <div className="text-center p-3 bg-rose-100 rounded-lg">
+                  <div className="text-2xl font-semibold text-rose-600">
                     {word.study_stats.incorrect_answers || 0}
                   </div>
-                  <div className="text-xs text-muted-foreground">Incorrect</div>
+                  <div className="caption text-xs">Incorrect</div>
                 </div>
                 
-                <div className="text-center p-3 bg-muted/50 rounded-lg">
-                  <div className="text-2xl font-bold text-blue-600">
+                <div className="text-center p-3 bg-secondary/10 rounded-lg">
+                  <div className="text-2xl font-semibold text-secondary">
                     {word.study_stats.accuracy ? `${Math.round(word.study_stats.accuracy)}%` : '0%'}
                   </div>
-                  <div className="text-xs text-muted-foreground">Accuracy</div>
+                  <div className="caption text-xs">Accuracy</div>
                 </div>
               </div>
             </div>
@@ -293,7 +294,7 @@ const WordDetailsModal = ({ isOpen, onClose, word, onEdit, onDelete, onStudy }) 
                 <Clock className="h-4 w-4" />
                 Etymology
               </h3>
-              <p className="text-muted-foreground">{word.etymology}</p>
+              <p className="caption">{word.etymology}</p>
             </div>
           )}
 
@@ -302,10 +303,10 @@ const WordDetailsModal = ({ isOpen, onClose, word, onEdit, onDelete, onStudy }) 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               {word.synonyms?.length > 0 && (
                 <div>
-                  <h4 className="font-medium mb-2 text-green-700">Synonyms</h4>
+                  <h4 className="font-medium mb-2 text-accent">Synonyms</h4>
                   <div className="flex flex-wrap gap-1">
                     {word.synonyms.map((synonym, index) => (
-                      <Badge key={index} variant="outline" className="text-green-700 border-green-200">
+                      <Badge key={index} variant="outline" className="text-accent border-accent/30">
                         {synonym}
                       </Badge>
                     ))}
@@ -315,10 +316,10 @@ const WordDetailsModal = ({ isOpen, onClose, word, onEdit, onDelete, onStudy }) 
               
               {word.antonyms?.length > 0 && (
                 <div>
-                  <h4 className="font-medium mb-2 text-red-700">Antonyms</h4>
+                  <h4 className="font-medium mb-2 text-rose-600">Antonyms</h4>
                   <div className="flex flex-wrap gap-1">
                     {word.antonyms.map((antonym, index) => (
-                      <Badge key={index} variant="outline" className="text-red-700 border-red-200">
+                      <Badge key={index} variant="outline" className="text-rose-600 border-rose-300">
                         {antonym}
                       </Badge>
                     ))}
